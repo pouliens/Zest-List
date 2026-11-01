@@ -53,8 +53,21 @@
   .lede { color: var(--muted); font-size: 16px; max-width: 60ch; margin: 0; }
   .lede a { text-decoration-color: var(--line); text-underline-offset: 3px; }
   .lede a:hover { text-decoration-color: var(--accent); }
-  .sources { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 8px; color: var(--muted); font-size: 14px; }
-  .sources li { display: flex; gap: 10px; align-items: baseline; }
+  .sources { margin-top: 14px; color: var(--muted); font-size: 14px; }
+  .sources summary {
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer; list-style: none;
+    font-size: 13px; color: var(--faint); user-select: none;
+  }
+  .sources summary::-webkit-details-marker { display: none; }
+  .sources summary::after {
+    content: ""; width: 6px; height: 6px; border: solid currentColor; border-width: 0 1.5px 1.5px 0;
+    transform: rotate(45deg) translateY(-2px); transition: transform .2s;
+  }
+  .sources[open] summary::after { transform: rotate(-135deg) translateY(-1px); }
+  .sources summary:hover { color: var(--text); }
+  .sources ul { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 8px; }
+  .sources li { line-height: 1.5; }
+  .sources .badge { margin-right: 4px; vertical-align: 1px; }
   .sources a { text-decoration-color: var(--line); text-underline-offset: 3px; }
   .sources a:hover { text-decoration-color: var(--accent); }
   .badge {
@@ -163,12 +176,15 @@
     <p class="eyebrow">A reading, looking &amp; listening list</p>
     <h1>The Zest List</h1>
     <p class="lede">
-      The writers, poets, essayists, painters and composers Ray Bradbury holds up as models of creative appetite, with three works to explore for each. Bradbury’s own prescription: a short story, a poem and an essay every night. Tick them off as you go; progress saves in this browser.
+      Artists Ray Bradbury held up as models of creative zest, with three works each. A short story, a poem and an essay a night.
     </p>
-    <ul class="sources">
-      <li><span class="badge essay">Essay</span><a href="https://uk.bookshop.org/search?keywords=Zen+in+the+Art+of+Writing+Bradbury" target="_blank" rel="noopener">“The Joy of Writing”</a>, in <em>Zen in the Art of Writing</em> (1990)</li>
-      <li><span class="badge talk">Talk</span><a href="https://www.youtube.com/watch?v=_W-r7ABrMYU" target="_blank" rel="noopener">“Telling the Truth”</a>, keynote at Point Loma’s Writer’s Symposium by the Sea (2001)</li>
-    </ul>
+    <details class="sources">
+      <summary>Sources</summary>
+      <ul>
+        <li><span class="badge essay">Essay</span> <a href="https://uk.bookshop.org/search?keywords=Zen+in+the+Art+of+Writing+Bradbury" target="_blank" rel="noopener">“The Joy of Writing”</a>, <em>Zen in the Art of Writing</em> (1990)</li>
+        <li><span class="badge talk">Talk</span> <a href="https://www.youtube.com/watch?v=_W-r7ABrMYU" target="_blank" rel="noopener">“Telling the Truth”</a>, Point Loma keynote (2001)</li>
+      </ul>
+    </details>
   </header>
 
   <div class="bar">
