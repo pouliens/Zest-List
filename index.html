@@ -19,6 +19,7 @@
     --accent: #c2410c;
     --accent-soft: #fdf1ea;
     --check: #15803d;
+    --talk: #4f46e5;
     --radius: 14px;
   }
   @media (prefers-color-scheme: dark) {
@@ -32,6 +33,7 @@
       --accent: #fb923c;
       --accent-soft: #2a1d14;
       --check: #4ade80;
+      --talk: #a5b4fc;
     }
   }
   * { box-sizing: border-box; }
@@ -51,6 +53,17 @@
   .lede { color: var(--muted); font-size: 16px; max-width: 60ch; margin: 0; }
   .lede a { text-decoration-color: var(--line); text-underline-offset: 3px; }
   .lede a:hover { text-decoration-color: var(--accent); }
+  .sources { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 8px; color: var(--muted); font-size: 14px; }
+  .sources li { display: flex; gap: 10px; align-items: baseline; }
+  .sources a { text-decoration-color: var(--line); text-underline-offset: 3px; }
+  .sources a:hover { text-decoration-color: var(--accent); }
+  .badge {
+    flex: none; font: 600 10px/1 Inter, sans-serif; letter-spacing: .08em; text-transform: uppercase;
+    padding: 4px 7px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted);
+  }
+  .badge.talk { color: var(--talk); border-color: color-mix(in srgb, var(--talk) 40%, var(--line)); }
+  .badge.essay { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
+  .badges { display: flex; gap: 4px; margin-top: 6px; }
 
   /* Progress + controls */
   .bar {
@@ -66,6 +79,8 @@
   .track { height: 4px; background: var(--line); border-radius: 99px; overflow: hidden; }
   .fill { height: 100%; width: 0; background: var(--accent); border-radius: 99px; transition: width .35s ease; }
   .controls { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; align-items: center; }
+  .controls + .controls { margin-top: 8px; }
+  .chip.src { font-size: 12px; padding: 4px 10px; }
   .chip {
     border: 1px solid var(--line); background: var(--surface); color: var(--muted);
     font: 500 13px Inter, sans-serif; padding: 6px 12px; border-radius: 99px; cursor: pointer;
@@ -148,10 +163,12 @@
     <p class="eyebrow">A reading, looking &amp; listening list</p>
     <h1>The Zest List</h1>
     <p class="lede">
-      Twenty artists Ray Bradbury names in his essay <em>“The Joy of Writing”</em> as examples of creators who worked with appetite and fun — with three works to explore for each. Tick them off as you go; progress saves in this browser.
-      <br><br>
-      Source: <a href="https://uk.bookshop.org/search?keywords=Zen+in+the+Art+of+Writing+Bradbury" target="_blank" rel="noopener"><em>Zen in the Art of Writing</em></a>, Ray Bradbury (1990).
+      The writers, poets, essayists, painters and composers Ray Bradbury holds up as models of creative appetite, with three works to explore for each. Bradbury’s own prescription: a short story, a poem and an essay every night. Tick them off as you go; progress saves in this browser.
     </p>
+    <ul class="sources">
+      <li><span class="badge essay">Essay</span><a href="https://uk.bookshop.org/search?keywords=Zen+in+the+Art+of+Writing+Bradbury" target="_blank" rel="noopener">“The Joy of Writing”</a>, in <em>Zen in the Art of Writing</em> (1990)</li>
+      <li><span class="badge talk">Talk</span><a href="https://www.youtube.com/watch?v=_W-r7ABrMYU" target="_blank" rel="noopener">“Telling the Truth”</a>, keynote at Point Loma’s Writer’s Symposium by the Sea (2001)</li>
+    </ul>
   </header>
 
   <div class="bar">
@@ -163,9 +180,16 @@
     <div class="controls" role="group" aria-label="Filter by category">
       <button class="chip" data-filter="all" aria-pressed="true">All</button>
       <button class="chip" data-filter="writers" aria-pressed="false">Writers</button>
+      <button class="chip" data-filter="stories" aria-pressed="false">Short stories</button>
       <button class="chip" data-filter="poets" aria-pressed="false">Poets</button>
+      <button class="chip" data-filter="essayists" aria-pressed="false">Essayists</button>
       <button class="chip" data-filter="painters" aria-pressed="false">Painters</button>
       <button class="chip" data-filter="musicians" aria-pressed="false">Musicians</button>
+    </div>
+    <div class="controls" role="group" aria-label="Filter by source">
+      <button class="chip src" data-src="all" aria-pressed="true">Both sources</button>
+      <button class="chip src" data-src="essay" aria-pressed="false">Essay</button>
+      <button class="chip src" data-src="talk" aria-pressed="false">Talk</button>
       <span class="spacer"></span>
       <button class="link-btn" id="toggleDone" aria-pressed="false">Hide finished</button>
       <button class="link-btn" id="reset">Reset</button>
@@ -175,7 +199,8 @@
   <main id="app"></main>
 
   <footer>
-    <p>Work links open Wikipedia; “Read” searches Project Gutenberg, “Listen” searches Spotify. Artist links go to free libraries, scores, galleries and shops.</p>
+    <p>Work links open Wikipedia. “Read” searches Project Gutenberg for public-domain works; “Find” searches Open Library (borrowable e-books) for newer ones; “Listen” searches Spotify. Artist links go to free libraries, scores, galleries and shops.</p>
+    <p>Talk names compiled from published summaries of the 2001 keynote; the essay names come from the text itself.</p>
     <p class="noprint">Checklist state is stored locally in your browser only.</p>
   </footer>
 </div>
@@ -191,10 +216,11 @@ const imslp = q => `https://imslp.org/wiki/Special:Search?search=${enc(q)}`;
 const presto = q => `https://www.prestomusic.com/search?search_query=${enc(q)}`;
 const gac = q => `https://artsandculture.google.com/search?q=${enc(q)}`;
 const commons = q => `https://commons.wikimedia.org/w/index.php?search=${enc(q)}`;
+const openlib = q => `https://openlibrary.org/search?q=${enc(q)}`;
 
-const bookLinks = (n) => [
-  ["Wikipedia", wiki(n)], ["Read free", gutenberg(n)], ["Standard Ebooks", standard(n)], ["Buy", bookshop(n)]
-];
+const bookLinks = (n, modern) => modern
+  ? [["Wikipedia", wiki(n)], ["Borrow (Open Library)", openlib(n)], ["Buy", bookshop(n)]]
+  : [["Wikipedia", wiki(n)], ["Read free", gutenberg(n)], ["Standard Ebooks", standard(n)], ["Buy", bookshop(n)]];
 const musicLinks = (n) => [
   ["Wikipedia", wiki(n)], ["Listen", spotify(n)], ["Free scores", imslp(n)], ["Buy recordings", presto(n)]
 ];
@@ -269,6 +295,124 @@ const SECTIONS = [
         ["Moby-Dick", 1851, "The whale, the obsession, the ocean of digressions."],
         ["Bartleby, the Scrivener", 1853, "“I would prefer not to” — a short masterpiece."],
         ["Billy Budd", 1924, "Innocence and law at sea; published posthumously."]
+      ]},
+    { name: "Jules Verne", dates: "1828–1905", src: ["talk"], why: "The boyhood inspiration Bradbury set out to emulate — science as adventure.",
+      works: [
+        ["Twenty Thousand Leagues Under the Seas", 1870, "Captain Nemo and the Nautilus."],
+        ["Journey to the Center of the Earth", 1864, "Down an Icelandic volcano into a lost world."],
+        ["Around the World in Eighty Days", 1872, "A wager, a stopwatch and a planet."]
+      ]},
+    { name: "Edgar Rice Burroughs", dates: "1875–1950", src: ["talk"], why: "His Mars books sent the young Bradbury, quite literally, to Mars.",
+      works: [
+        ["A Princess of Mars", 1912, "John Carter on Barsoom — the seed of The Martian Chronicles."],
+        ["Tarzan of the Apes", 1912, "The original pulp jungle legend."],
+        ["The Gods of Mars", 1918, "The Barsoom saga continues."]
+      ]}
+  ]},
+  { id: "stories", label: "Short stories", artists: [
+    { name: "Roald Dahl", dates: "1916–1990", src: ["talk"], modern: true, why: "Wicked adult tales with a sting in the last line.",
+      works: [
+        ["Lamb to the Slaughter", 1953, "The perfect murder weapon, served for dinner."],
+        ["The Landlady", 1959, "A cosy B&B that is anything but."],
+        ["Man from the South", 1948, "A lighter, a bet and a little finger."]
+      ]},
+    { name: "Guy de Maupassant", dates: "1850–1893", why: "The master of the short, sharp, ironic tale.",
+      works: [
+        ["The Necklace", 1884, "The most famous twist in French fiction."],
+        ["Boule de Suif", 1880, "A stagecoach of hypocrites in wartime."],
+        ["The Horla", 1887, "A diary of creeping, invisible dread."]
+      ]},
+    { name: "John Cheever", dates: "1912–1982", modern: true, why: "Suburban America, luminous and unsettling.",
+      works: [
+        ["The Swimmer (short story)", 1964, "A man swims home through his neighbours’ pools."],
+        ["The Enormous Radio", 1947, "A radio that broadcasts the neighbours’ secrets."],
+        ["The Country Husband", 1954, "A plane crash nobody wants to hear about."]
+      ]},
+    { name: "Richard Matheson", dates: "1926–2013", modern: true, why: "Bradbury’s friend and fellow fantasist; huge influence on TV and film horror.",
+      works: [
+        ["Born of Man and Woman", 1950, "His startling debut, narrated from a cellar."],
+        ["Duel (short story)", 1971, "A driver, a truck and a highway — later Spielberg’s first film."],
+        ["I Am Legend", 1954, "The last man alive among vampires."]
+      ]},
+    { name: "Nigel Kneale", dates: "1922–2006", modern: true, why: "Manx-born master of British weird fiction and television horror.",
+      works: [
+        ["Tomato Cain and Other Stories", 1949, "His prize-winning collection of uncanny tales."],
+        ["The Quatermass Experiment", 1953, "The serial that invented British TV sci-fi."],
+        ["The Stone Tape", 1972, "A haunting explained — and not explained — by science."]
+      ]},
+    { name: "John Collier", dates: "1901–1980", modern: true, why: "Elegant, devilishly witty fantasies — a Bradbury favourite.",
+      works: [
+        ["Fancies and Goodnights", 1951, "His award-winning collected stories; start here."],
+        ["The Chaser", 1940, "A love potion, and the price of the antidote."],
+        ["Thus I Refute Beelzy", 1940, "A child’s imaginary friend, and a father who scoffs."]
+      ]},
+    { name: "Edith Wharton", dates: "1862–1937", why: "Social precision with a cold, dark undertow; also a fine ghost-story writer.",
+      works: [
+        ["Roman Fever", 1934, "Two old friends, one ruin, one devastating last line."],
+        ["Ethan Frome", 1911, "A short, wintry tragedy."],
+        ["The Age of Innocence", 1920, "Old New York’s gilded cage."]
+      ]},
+    { name: "Katherine Anne Porter", dates: "1890–1980", modern: true, why: "Exacting, lyrical stories of memory and mortality.",
+      works: [
+        ["The Jilting of Granny Weatherall", 1930, "A dying woman’s last stream of thought."],
+        ["Flowering Judas", 1930, "Revolution and betrayal in Mexico."],
+        ["Pale Horse, Pale Rider", 1939, "Love during the 1918 flu."]
+      ]},
+    { name: "Eudora Welty", dates: "1909–2001", modern: true, why: "Mississippi voices, comic and profound.",
+      works: [
+        ["A Worn Path", 1941, "An old woman’s long walk for medicine."],
+        ["Why I Live at the P.O.", 1941, "A family feud in one hilarious monologue."],
+        ["Petrified Man", 1939, "Gossip in a beauty parlour."]
+      ]},
+    { name: "Washington Irving", dates: "1783–1859", why: "America’s first great storyteller — folklore and gentle comedy.",
+      works: [
+        ["The Legend of Sleepy Hollow", 1820, "Ichabod Crane and the Headless Horseman."],
+        ["Rip Van Winkle", 1819, "Twenty years asleep in the Catskills."],
+        ["Tales of the Alhambra", 1832, "Moorish legends from a Granada palace."]
+      ]},
+    { name: "Edgar Allan Poe", dates: "1809–1849", why: "A lifelong Bradbury touchstone — he even sent Poe to Mars in “Usher II”.",
+      works: [
+        ["The Fall of the House of Usher", 1839, "A house and a family collapse together."],
+        ["The Tell-Tale Heart", 1843, "The beating heart beneath the floorboards."],
+        ["The Masque of the Red Death", 1842, "A sealed party and an uninvited guest."]
+      ]},
+    { name: "Nathaniel Hawthorne", dates: "1804–1864", why: "Puritan guilt rendered as dark allegory.",
+      works: [
+        ["Young Goodman Brown", 1835, "A night journey into the woods — and doubt."],
+        ["The Minister's Black Veil", 1836, "A pastor hides his face for life."],
+        ["The Scarlet Letter", 1850, "Hester Prynne and her letter ‘A’."]
+      ]},
+    { name: "H. G. Wells", dates: "1866–1946", why: "The father of modern science fiction, and a fine short-story writer.",
+      works: [
+        ["The Country of the Blind", 1904, "In a valley of the blind, is the one-eyed man king?"],
+        ["The Time Machine", 1895, "Into the far future of the human race."],
+        ["The War of the Worlds", 1898, "The Martians land in Surrey."]
+      ]},
+    { name: "Arthur Conan Doyle", dates: "1859–1930", why: "Sherlock Holmes, and adventure stories at full throttle.",
+      works: [
+        ["A Scandal in Bohemia", 1891, "The first Holmes short story — and ‘the woman’."],
+        ["The Hound of the Baskervilles", 1902, "A spectral hound on Dartmoor."],
+        ["The Lost World (Conan Doyle novel)", 1912, "Dinosaurs on a South American plateau."]
+      ]},
+    { name: "P. G. Wodehouse", dates: "1881–1975", modern: true, why: "Bradbury praised Jeeves; pure verbal joy.",
+      works: [
+        ["Carry On, Jeeves", 1925, "Classic Bertie-and-Jeeves stories."],
+        ["Right Ho, Jeeves", 1934, "Gussie Fink-Nottle’s prize-giving speech."],
+        ["The Code of the Woosters", 1938, "A cow-creamer, a notebook and chaos."]
+      ]}
+  ]},
+  { id: "essayists", label: "Essayists", artists: [
+    { name: "Loren Eiseley", dates: "1907–1977", modern: true, why: "Anthropologist who wrote science like poetry — Bradbury’s favourite essayist.",
+      works: [
+        ["The Fire Apes", "", "The essay Bradbury singled out by name in the talk."],
+        ["The Immense Journey", 1957, "Evolution and deep time, as lyrical essays."],
+        ["The Star Thrower", 1978, "His best essays, gathered posthumously."]
+      ]},
+    { name: "Aldous Huxley", dates: "1894–1963", modern: true, why: "Restless, encyclopaedic mind; Bradbury recommended his essays.",
+      works: [
+        ["Collected Essays (Huxley)", 1959, "The best way into Huxley the essayist."],
+        ["The Doors of Perception", 1954, "On perception, art and altered states."],
+        ["Brave New World", 1932, "The novel, for the full picture of his ideas."]
       ]}
   ]},
   { id: "poets", label: "Poets", artists: [
@@ -289,6 +433,12 @@ const SECTIONS = [
         ["The Rape of the Lock", 1714, "Mock-epic over a stolen curl of hair."],
         ["An Essay on Man", 1734, "Philosophy in quotable couplets."],
         ["The Dunciad", 1728, "A gleeful demolition of dull writers."]
+      ]},
+    { name: "Robert Frost", dates: "1874–1963", src: ["talk"], why: "Plain New England speech carrying deep, dark undercurrents.",
+      works: [
+        ["The Road Not Taken", 1916, "The most quoted, and most misread, poem in America."],
+        ["Stopping by Woods on a Snowy Evening", 1923, "Miles to go before I sleep."],
+        ["Mending Wall", 1914, "Good fences, and the neighbours they make."]
       ]}
   ]},
   { id: "painters", label: "Painters", artists: [
@@ -338,7 +488,13 @@ let state = {};
 try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { state = {}; }
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
 const slug = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-");
-const display = t => t.replace(/\s*\((play|Mozart|Haydn|Ravel|Tintoretto)\)$/, "");
+const display = t => t.replace(/\s*\([^)]*\)$/, "");
+// Artists named in both the essay and the 2001 talk
+const BOTH = new Set(["William Shakespeare", "Alexander Pope", "Herman Melville", "George Bernard Shaw"]);
+SECTIONS.forEach(sec => sec.artists.forEach(a => {
+  a.src = BOTH.has(a.name) ? ["essay", "talk"]
+        : (a.src || (sec.id === "stories" || sec.id === "essayists" ? ["talk"] : ["essay"]));
+}));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
 
 const app = document.getElementById("app");
@@ -347,9 +503,11 @@ SECTIONS.forEach(sec => {
   html += `<section data-cat="${sec.id}"><h2>${sec.label} <span>${sec.artists.length}</span></h2><div class="grid">`;
   sec.artists.forEach(a => {
     const aid = slug(a.name);
-    const links = (sec.id === "musicians" ? musicLinks : sec.id === "painters" ? artLinks : bookLinks)(a.name).concat(a.extra || []);
-    html += `<article class="card" data-artist="${aid}">
+    const links = (sec.id === "musicians" ? musicLinks : sec.id === "painters" ? artLinks : bookLinks)(a.name, a.modern).concat(a.extra || []);
+    const badges = a.src.map(s => `<span class="badge ${s}">${s === "talk" ? "Talk" : "Essay"}</span>`).join("");
+    html += `<article class="card" data-artist="${aid}" data-src="${a.src.join(" ")}">
       <div class="card-head"><h3 class="name">${esc(a.name)}</h3><span class="dates">${a.dates}</span></div>
+      <div class="badges">${badges}</div>
       <p class="why">${esc(a.why)}${a.tip ? ` <em>${esc(a.tip)}</em>` : ""}</p>
       <ul class="works">`;
     a.works.forEach(([t, y, note]) => {
@@ -358,11 +516,12 @@ SECTIONS.forEach(sec => {
       const q = `${shown} ${a.name.split(" ").slice(-1)[0]}`;
       const second = sec.id === "musicians" ? ["Listen", spotify(q)]
                    : sec.id === "painters" ? ["See it", gac(shown)]
+                   : a.modern ? ["Find", openlib(q)]
                    : ["Read", gutenberg(shown)];
       html += `<li><label class="work">
         <input type="checkbox" data-id="${id}" ${state[id] ? "checked" : ""}>
         <div>
-          <div class="title-row"><span class="wtitle">${esc(shown)}</span><span class="year">${y}</span></div>
+          <div class="title-row"><span class="wtitle">${esc(shown)}</span>${y ? `<span class="year">${y}</span>` : ""}</div>
           <div class="note">${esc(note)}</div>
           <div class="wlinks"><a href="${wiki(t)}" target="_blank" rel="noopener">About</a><a href="${second[1]}" target="_blank" rel="noopener">${second[0]}</a></div>
         </div>
@@ -399,10 +558,25 @@ app.addEventListener("change", e => {
   save(); update();
 });
 
-document.querySelectorAll(".chip").forEach(chip => chip.addEventListener("click", () => {
-  document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === chip));
-  const f = chip.dataset.filter;
-  document.querySelectorAll("section[data-cat]").forEach(s => s.classList.toggle("hidden", f !== "all" && s.dataset.cat !== f));
+let catFilter = "all", srcFilter = "all";
+function applyFilters() {
+  document.querySelectorAll("section[data-cat]").forEach(s => {
+    let visible = 0;
+    s.querySelectorAll(".card").forEach(card => {
+      const show = srcFilter === "all" || card.dataset.src.split(" ").includes(srcFilter);
+      card.classList.toggle("hidden", !show);
+      if (show) visible++;
+    });
+    s.classList.toggle("hidden", (catFilter !== "all" && s.dataset.cat !== catFilter) || visible === 0);
+  });
+}
+document.querySelectorAll(".chip[data-filter]").forEach(chip => chip.addEventListener("click", () => {
+  document.querySelectorAll(".chip[data-filter]").forEach(c => c.setAttribute("aria-pressed", c === chip));
+  catFilter = chip.dataset.filter; applyFilters();
+}));
+document.querySelectorAll(".chip[data-src]").forEach(chip => chip.addEventListener("click", () => {
+  document.querySelectorAll(".chip[data-src]").forEach(c => c.setAttribute("aria-pressed", c === chip));
+  srcFilter = chip.dataset.src; applyFilters();
 }));
 
 const toggle = document.getElementById("toggleDone");
