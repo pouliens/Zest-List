@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bradbury's Zest List</title>
+<meta name="description" content="A checklist of the writers, poets, painters and composers Ray Bradbury names in 'The Joy of Writing', with three works to explore for each.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --faint: #9a9a9a;
+    --line: #e7e5e0;
+    --accent: #c2410c;
+    --accent-soft: #fdf1ea;
+    --check: #15803d;
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111110;
+      --surface: #1a1a19;
+      --text: #ededeb;
+      --muted: #a3a3a0;
+      --faint: #6f6f6c;
+      --line: #2a2a28;
+      --accent: #fb923c;
+      --accent-soft: #2a1d14;
+      --check: #4ade80;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.55 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 56px 16px 80px; }
+
+  /* Header */
+  .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin: 0 0 12px; }
+  h1 { font-family: Newsreader, Georgia, serif; font-weight: 600; font-size: clamp(34px, 7vw, 52px); line-height: 1.05; letter-spacing: -.02em; margin: 0 0 16px; }
+  .lede { color: var(--muted); font-size: 16px; max-width: 60ch; margin: 0; }
+  .lede a { text-decoration-color: var(--line); text-underline-offset: 3px; }
+  .lede a:hover { text-decoration-color: var(--accent); }
+
+  /* Progress + controls */
+  .bar {
+    position: sticky; top: 0; z-index: 5;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    margin: 36px -16px 8px; padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .progress-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  .count { font-family: Newsreader, Georgia, serif; font-size: 22px; }
+  .count small { font-family: Inter, sans-serif; font-size: 13px; color: var(--muted); margin-left: 6px; }
+  .track { height: 4px; background: var(--line); border-radius: 99px; overflow: hidden; }
+  .fill { height: 100%; width: 0; background: var(--accent); border-radius: 99px; transition: width .35s ease; }
+  .controls { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; align-items: center; }
+  .chip {
+    border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+    font: 500 13px Inter, sans-serif; padding: 6px 12px; border-radius: 99px; cursor: pointer;
+  }
+  .chip[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .spacer { flex: 1; }
+  .link-btn { background: none; border: 0; color: var(--muted); font: 13px Inter, sans-serif; cursor: pointer; padding: 6px 4px; }
+  .link-btn:hover { color: var(--text); }
+
+  /* Sections */
+  section { margin-top: 44px; }
+  h2 {
+    font-family: Newsreader, Georgia, serif; font-weight: 400; font-style: italic;
+    font-size: 26px; margin: 0 0 16px; display: flex; align-items: baseline; gap: 10px;
+  }
+  h2 span { font: 500 12px Inter, sans-serif; font-style: normal; color: var(--faint); letter-spacing: .04em; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px 20px 16px; display: flex; flex-direction: column;
+  }
+  .card.done { border-color: color-mix(in srgb, var(--check) 45%, var(--line)); }
+  .card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .name { font-family: Newsreader, Georgia, serif; font-size: 22px; font-weight: 600; margin: 0; letter-spacing: -.01em; }
+  .dates { font-size: 12px; color: var(--faint); white-space: nowrap; }
+  .why { color: var(--muted); font-size: 14px; margin: 6px 0 14px; }
+  .tally { font-size: 12px; color: var(--faint); }
+  .card.done .tally { color: var(--check); }
+
+  ul.works { list-style: none; margin: 0 0 14px; padding: 0; border-top: 1px solid var(--line); }
+  ul.works li { border-bottom: 1px solid var(--line); }
+  .work { display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 10px 0; align-items: start; }
+  .work input {
+    appearance: none; -webkit-appearance: none; margin: 2px 0 0; width: 20px; height: 20px;
+    border: 1.5px solid var(--faint); border-radius: 6px; cursor: pointer; display: grid; place-content: center;
+    transition: background .15s, border-color .15s;
+  }
+  .work input::after {
+    content: ""; width: 10px; height: 6px; border: 2px solid var(--surface); border-top: 0; border-right: 0;
+    transform: rotate(-45deg) translate(1px, -1px) scale(0); transition: transform .15s;
+  }
+  .work input:checked { background: var(--check); border-color: var(--check); }
+  .work input:checked::after { transform: rotate(-45deg) translate(1px, -1px) scale(1); }
+  .work input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .title-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+  .wtitle { font-weight: 500; }
+  .work input:checked ~ div .wtitle { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--faint); }
+  .year { font-size: 12px; color: var(--faint); }
+  .note { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .wlinks { margin-top: 4px; display: flex; gap: 12px; font-size: 12px; }
+  .wlinks a { color: var(--accent); text-decoration: none; }
+  .wlinks a:hover { text-decoration: underline; }
+
+  .links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+  .links a {
+    font-size: 12px; text-decoration: none; padding: 5px 10px; border-radius: 99px;
+    background: var(--accent-soft); color: var(--accent); font-weight: 500;
+  }
+  .links a:hover { filter: brightness(.95); }
+
+  .hide-done .card.done { display: none; }
+  .hidden { display: none !important; }
+
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--faint); font-size: 13px; }
+  footer p { margin: 0 0 6px; }
+
+  @media print {
+    .bar, .links, .wlinks, footer .noprint { display: none; }
+    body { background: #fff; color: #000; }
+    .card { break-inside: avoid; border-color: #ccc; }
+    .wrap { padding-top: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">A reading, looking &amp; listening list</p>
+    <h1>The Zest List</h1>
+    <p class="lede">
+      Twenty artists Ray Bradbury names in his essay <em>“The Joy of Writing”</em> as examples of creators who worked with appetite and fun — with three works to explore for each. Tick them off as you go; progress saves in this browser.
+      <br><br>
+      Source: <a href="https://uk.bookshop.org/search?keywords=Zen+in+the+Art+of+Writing+Bradbury" target="_blank" rel="noopener"><em>Zen in the Art of Writing</em></a>, Ray Bradbury (1990).
+    </p>
+  </header>
+
+  <div class="bar">
+    <div class="progress-row">
+      <div class="count"><span id="done">0</span> / <span id="total">0</span><small>works explored</small></div>
+      <div class="tally" id="artistsDone"></div>
+    </div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="controls" role="group" aria-label="Filter by category">
+      <button class="chip" data-filter="all" aria-pressed="true">All</button>
+      <button class="chip" data-filter="writers" aria-pressed="false">Writers</button>
+      <button class="chip" data-filter="poets" aria-pressed="false">Poets</button>
+      <button class="chip" data-filter="painters" aria-pressed="false">Painters</button>
+      <button class="chip" data-filter="musicians" aria-pressed="false">Musicians</button>
+      <span class="spacer"></span>
+      <button class="link-btn" id="toggleDone" aria-pressed="false">Hide finished</button>
+      <button class="link-btn" id="reset">Reset</button>
+    </div>
+  </div>
+
+  <main id="app"></main>
+
+  <footer>
+    <p>Work links open Wikipedia; “Read” searches Project Gutenberg, “Listen” searches Spotify. Artist links go to free libraries, scores, galleries and shops.</p>
+    <p class="noprint">Checklist state is stored locally in your browser only.</p>
+  </footer>
+</div>
+
+<script>
+const enc = s => encodeURIComponent(s);
+const wiki = t => `https://en.wikipedia.org/w/index.php?search=${enc(t)}`;
+const gutenberg = q => `https://www.gutenberg.org/ebooks/search/?query=${enc(q)}`;
+const standard = q => `https://standardebooks.org/ebooks?query=${enc(q)}`;
+const bookshop = q => `https://uk.bookshop.org/search?keywords=${enc(q)}`;
+const spotify = q => `https://open.spotify.com/search/${enc(q)}`;
+const imslp = q => `https://imslp.org/wiki/Special:Search?search=${enc(q)}`;
+const presto = q => `https://www.prestomusic.com/search?search_query=${enc(q)}`;
+const gac = q => `https://artsandculture.google.com/search?q=${enc(q)}`;
+const commons = q => `https://commons.wikimedia.org/w/index.php?search=${enc(q)}`;
+
+const bookLinks = (n) => [
+  ["Wikipedia", wiki(n)], ["Read free", gutenberg(n)], ["Standard Ebooks", standard(n)], ["Buy", bookshop(n)]
+];
+const musicLinks = (n) => [
+  ["Wikipedia", wiki(n)], ["Listen", spotify(n)], ["Free scores", imslp(n)], ["Buy recordings", presto(n)]
+];
+const artLinks = (n) => [
+  ["Wikipedia", wiki(n)], ["Google Arts & Culture", gac(n)], ["Images", commons(n)], ["Art books", bookshop(n)]
+];
+
+const SECTIONS = [
+  { id: "writers", label: "Writers", artists: [
+    { name: "Charles Dickens", dates: "1812–1870", why: "Teeming casts, comic grotesques and moral fire — Victorian London at full volume.",
+      works: [
+        ["Great Expectations", 1861, "Pip’s rise and reckoning; Dickens at his most controlled."],
+        ["Bleak House", 1853, "A fog-bound lawsuit swallowing a whole society."],
+        ["A Christmas Carol", 1843, "The short, joyful entry point — read it in an evening."]
+      ]},
+    { name: "Mark Twain", dates: "1835–1910", why: "American vernacular turned into literature, with jokes that bite.",
+      works: [
+        ["Adventures of Huckleberry Finn", 1884, "A raft, a river and a boy’s conscience."],
+        ["The Adventures of Tom Sawyer", 1876, "The lighter, sunnier companion to Huck."],
+        ["Life on the Mississippi", 1883, "Memoir of his steamboat-pilot years."]
+      ]},
+    { name: "Thomas Wolfe", dates: "1900–1938", why: "Torrential, lyrical autobiographical novels — a key influence on Bradbury himself.",
+      works: [
+        ["Look Homeward, Angel", 1929, "His sprawling, rhapsodic debut."],
+        ["Of Time and the River", 1935, "The sequel: Eugene Gant heads north and abroad."],
+        ["You Can't Go Home Again", 1940, "Published posthumously; the title became a proverb."]
+      ]},
+    { name: "Thomas Love Peacock", dates: "1785–1866", why: "Short, witty ‘conversation novels’ satirising the Romantics.",
+      works: [
+        ["Nightmare Abbey", 1818, "Gothic gloom parodied — Shelley and Byron in disguise."],
+        ["Headlong Hall", 1816, "Philosophers argue over a country-house Christmas."],
+        ["Crotchet Castle", 1831, "More dinner-table satire of fashionable ideas."]
+      ]},
+    { name: "George Bernard Shaw", dates: "1856–1950", why: "Comedies of ideas — argument as entertainment.",
+      works: [
+        ["Pygmalion (play)", 1913, "The flower girl and the phonetics professor."],
+        ["Man and Superman", 1903, "Includes the dazzling ‘Don Juan in Hell’ dream act."],
+        ["Saint Joan (play)", 1923, "Joan of Arc as a clear-eyed tragedy."]
+      ]},
+    { name: "Molière", dates: "1622–1673", why: "France’s great comic dramatist; hypocrisy never looked so funny.",
+      works: [
+        ["Tartuffe", 1664, "A religious fraud takes over a household."],
+        ["The Misanthrope", 1666, "A man who refuses all social lies."],
+        ["The Imaginary Invalid", 1673, "A hypochondriac farce — his last play."]
+      ]},
+    { name: "Ben Jonson", dates: "1572–1637", why: "Shakespeare’s rival; savage, inventive comedies of greed.",
+      works: [
+        ["Volpone", 1606, "A con man fakes his deathbed to fleece legacy hunters."],
+        ["The Alchemist (play)", 1610, "Swindlers run a scam house in plague-time London."],
+        ["Bartholomew Fair", 1614, "A riotous panorama of a London fair."]
+      ]},
+    { name: "William Wycherley", dates: "c.1641–1716", why: "Sharp Restoration comedy of manners.",
+      works: [
+        ["The Country Wife", 1675, "The era’s most notorious, and funniest, sex comedy."],
+        ["The Plain Dealer", 1676, "A blunt sea captain among liars."],
+        ["Love in a Wood", 1671, "His lively debut comedy."]
+      ]},
+    { name: "Samuel Johnson", dates: "1709–1784", why: "Lexicographer, critic and the 18th century’s great talker.",
+      works: [
+        ["A Dictionary of the English Language", 1755, "Browse it for the witty, opinionated definitions."],
+        ["The History of Rasselas, Prince of Abissinia", 1759, "A philosophical fable on the search for happiness."],
+        ["Lives of the Most Eminent English Poets", 1781, "Biography and criticism, crisply judged."]
+      ], tip: "Pair with Boswell’s Life of Samuel Johnson." },
+    { name: "William Shakespeare", dates: "1564–1616", why: "Bradbury’s image of thunder and lightning — the whole storm.",
+      works: [
+        ["Hamlet", 1600, "The play that thinks out loud."],
+        ["King Lear", 1606, "Tragedy on the storm-blasted heath."],
+        ["The Tempest", 1611, "Magic, forgiveness and farewell."]
+      ], extra: [["Folger editions", "https://www.folger.edu/explore/shakespeares-works/"]] },
+    { name: "Herman Melville", dates: "1819–1891", why: "Bradbury’s other storm — he adapted Moby-Dick for John Huston’s 1956 film.",
+      works: [
+        ["Moby-Dick", 1851, "The whale, the obsession, the ocean of digressions."],
+        ["Bartleby, the Scrivener", 1853, "“I would prefer not to” — a short masterpiece."],
+        ["Billy Budd", 1924, "Innocence and law at sea; published posthumously."]
+      ]}
+  ]},
+  { id: "poets", label: "Poets", artists: [
+    { name: "Gerard Manley Hopkins", dates: "1844–1889", why: "Sprung rhythm and dense, ecstatic sound — read him aloud.",
+      works: [
+        ["The Windhover", 1877, "A kestrel in flight, dedicated ‘to Christ our Lord’."],
+        ["Pied Beauty", 1877, "Praise for all things dappled and strange."],
+        ["The Wreck of the Deutschland", 1875, "His long, tumultuous breakthrough ode."]
+      ]},
+    { name: "Dylan Thomas", dates: "1914–1953", why: "Welsh music and pure verbal appetite.",
+      works: [
+        ["Do not go gentle into that good night", 1951, "The villanelle of defiance."],
+        ["Fern Hill", 1945, "Childhood remembered in a rush of green and gold."],
+        ["Under Milk Wood", 1954, "A ‘play for voices’ — best heard, not read."]
+      ]},
+    { name: "Alexander Pope", dates: "1688–1744", why: "Heroic couplets polished to a blade.",
+      works: [
+        ["The Rape of the Lock", 1714, "Mock-epic over a stolen curl of hair."],
+        ["An Essay on Man", 1734, "Philosophy in quotable couplets."],
+        ["The Dunciad", 1728, "A gleeful demolition of dull writers."]
+      ]}
+  ]},
+  { id: "painters", label: "Painters", artists: [
+    { name: "El Greco", dates: "1541–1614", why: "Elongated figures, unearthly light — visionary painting.",
+      works: [
+        ["The Burial of the Count of Orgaz", 1588, "Church of Santo Tomé, Toledo."],
+        ["View of Toledo", 1600, "A storm over the city — The Met, New York."],
+        ["The Opening of the Fifth Seal", 1614, "Startlingly modern — also at The Met."]
+      ]},
+    { name: "Tintoretto", dates: "c.1518–1594", why: "Venetian drama on a vast scale, painted at speed.",
+      works: [
+        ["Last Supper (Tintoretto)", 1594, "A diagonal, lamp-lit table — San Giorgio Maggiore, Venice."],
+        ["Miracle of the Slave", 1548, "The canvas that made his name — Gallerie dell’Accademia."],
+        ["Crucifixion (Tintoretto)", 1565, "An immense crowd scene — Scuola Grande di San Rocco."]
+      ]}
+  ]},
+  { id: "musicians", label: "Musicians", artists: [
+    { name: "Wolfgang Amadeus Mozart", dates: "1756–1791", why: "Effortless invention, from comedy to the sublime.",
+      works: [
+        ["Requiem (Mozart)", 1791, "Unfinished at his death; haunting throughout."],
+        ["The Marriage of Figaro", 1786, "Perhaps the perfect comic opera."],
+        ["Symphony No. 41 (Mozart)", 1788, "The ‘Jupiter’ — that fugal finale."]
+      ]},
+    { name: "Joseph Haydn", dates: "1732–1809", why: "Father of the symphony and quartet — and full of musical jokes.",
+      works: [
+        ["The Creation (Haydn)", 1798, "The light-bursting ‘and there was LIGHT’ moment."],
+        ["Symphony No. 94 (Haydn)", 1791, "The ‘Surprise’ — wait for the slow movement."],
+        ["String Quartets, Op. 76 (Haydn)", 1797, "Includes the ‘Emperor’ and ‘Sunrise’."]
+      ]},
+    { name: "Maurice Ravel", dates: "1875–1937", why: "Precision-made colour and orchestral wizardry.",
+      works: [
+        ["Boléro", 1928, "One melody, one long crescendo."],
+        ["Daphnis et Chloé", 1912, "The ballet; the ‘Daybreak’ section is glorious."],
+        ["Piano Concerto in G major (Ravel)", 1931, "Jazz-tinged outer movements, a heart-stopping slow one."]
+      ]},
+    { name: "Johann Strauss II", dates: "1825–1899", why: "The waltz king — Bradbury adds an exclamation mark, as if daring you to object.",
+      works: [
+        ["The Blue Danube", 1867, "The waltz everyone knows (and 2001 made cosmic)."],
+        ["Die Fledermaus", 1874, "Champagne-fuelled operetta."],
+        ["Tales from the Vienna Woods", 1868, "Opens with a zither — try a live recording."]
+      ]}
+  ]}
+];
+
+const KEY = "zest-list-v1";
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { state = {}; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+const slug = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-");
+const display = t => t.replace(/\s*\((play|Mozart|Haydn|Ravel|Tintoretto)\)$/, "");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+
+const app = document.getElementById("app");
+let html = "";
+SECTIONS.forEach(sec => {
+  html += `<section data-cat="${sec.id}"><h2>${sec.label} <span>${sec.artists.length}</span></h2><div class="grid">`;
+  sec.artists.forEach(a => {
+    const aid = slug(a.name);
+    const links = (sec.id === "musicians" ? musicLinks : sec.id === "painters" ? artLinks : bookLinks)(a.name).concat(a.extra || []);
+    html += `<article class="card" data-artist="${aid}">
+      <div class="card-head"><h3 class="name">${esc(a.name)}</h3><span class="dates">${a.dates}</span></div>
+      <p class="why">${esc(a.why)}${a.tip ? ` <em>${esc(a.tip)}</em>` : ""}</p>
+      <ul class="works">`;
+    a.works.forEach(([t, y, note]) => {
+      const id = `${aid}--${slug(t)}`;
+      const shown = display(t);
+      const q = `${shown} ${a.name.split(" ").slice(-1)[0]}`;
+      const second = sec.id === "musicians" ? ["Listen", spotify(q)]
+                   : sec.id === "painters" ? ["See it", gac(shown)]
+                   : ["Read", gutenberg(shown)];
+      html += `<li><label class="work">
+        <input type="checkbox" data-id="${id}" ${state[id] ? "checked" : ""}>
+        <div>
+          <div class="title-row"><span class="wtitle">${esc(shown)}</span><span class="year">${y}</span></div>
+          <div class="note">${esc(note)}</div>
+          <div class="wlinks"><a href="${wiki(t)}" target="_blank" rel="noopener">About</a><a href="${second[1]}" target="_blank" rel="noopener">${second[0]}</a></div>
+        </div>
+      </label></li>`;
+    });
+    html += `</ul><div class="tally" data-tally></div><div class="links" style="margin-top:12px">` +
+      links.map(([l, u]) => `<a href="${u}" target="_blank" rel="noopener">${esc(l)}</a>`).join("") +
+      `</div></article>`;
+  });
+  html += `</div></section>`;
+});
+app.innerHTML = html;
+
+function update() {
+  const boxes = [...document.querySelectorAll(".work input")];
+  const done = boxes.filter(b => b.checked).length;
+  document.getElementById("done").textContent = done;
+  document.getElementById("total").textContent = boxes.length;
+  document.getElementById("fill").style.width = (done / boxes.length * 100) + "%";
+  let artistsDone = 0;
+  document.querySelectorAll(".card").forEach(card => {
+    const b = [...card.querySelectorAll("input")];
+    const n = b.filter(x => x.checked).length;
+    card.classList.toggle("done", n === b.length);
+    if (n === b.length) artistsDone++;
+    card.querySelector("[data-tally]").textContent = n === b.length ? "✓ All three explored" : `${n} of ${b.length} explored`;
+  });
+  document.getElementById("artistsDone").textContent = `${artistsDone} of ${document.querySelectorAll(".card").length} artists complete`;
+}
+
+app.addEventListener("change", e => {
+  if (!e.target.matches("input[data-id]")) return;
+  state[e.target.dataset.id] = e.target.checked;
+  save(); update();
+});
+
+document.querySelectorAll(".chip").forEach(chip => chip.addEventListener("click", () => {
+  document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === chip));
+  const f = chip.dataset.filter;
+  document.querySelectorAll("section[data-cat]").forEach(s => s.classList.toggle("hidden", f !== "all" && s.dataset.cat !== f));
+}));
+
+const toggle = document.getElementById("toggleDone");
+toggle.addEventListener("click", () => {
+  const on = document.body.classList.toggle("hide-done");
+  toggle.setAttribute("aria-pressed", on);
+  toggle.textContent = on ? "Show finished" : "Hide finished";
+});
+
+document.getElementById("reset").addEventListener("click", () => {
+  if (!confirm("Clear all ticks?")) return;
+  state = {}; save();
+  document.querySelectorAll(".work input").forEach(b => b.checked = false);
+  update();
+});
+
+update();
+</script>
+</body>
+</html>
