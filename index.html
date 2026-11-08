@@ -75,6 +75,7 @@
     padding: 4px 7px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted);
   }
   .badge.talk { color: var(--talk); border-color: color-mix(in srgb, var(--talk) 40%, var(--line)); }
+  .badge.pick { color: var(--muted); }
   .badge.essay { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
   .badges { display: flex; gap: 4px; margin-top: 6px; }
 
@@ -239,6 +240,7 @@
       <ul>
         <li><span class="badge essay">Essay</span> <a href="https://uk.bookshop.org/search?keywords=Zen+in+the+Art+of+Writing+Bradbury" target="_blank" rel="noopener">“The Joy of Writing”</a>, <em>Zen in the Art of Writing</em> (1990)</li>
         <li><span class="badge talk">Talk</span> <a href="https://www.youtube.com/watch?v=_W-r7ABrMYU" target="_blank" rel="noopener">“Telling the Truth”</a>, Point Loma keynote (2001)</li>
+        <li><span class="badge pick">Pick</span> Not Bradbury’s: modern SF &amp; fantasy short fiction added for the nightly story</li>
       </ul>
     </details>
   </header>
@@ -259,15 +261,17 @@
       <button class="chip" data-filter="all" aria-pressed="true">All</button>
       <button class="chip" data-filter="writers" aria-pressed="false">Writers</button>
       <button class="chip" data-filter="stories" aria-pressed="false">Short stories</button>
+      <button class="chip" data-filter="picks" aria-pressed="false">Modern SF &amp; fantasy</button>
       <button class="chip" data-filter="poets" aria-pressed="false">Poets</button>
       <button class="chip" data-filter="essayists" aria-pressed="false">Essayists</button>
       <button class="chip" data-filter="painters" aria-pressed="false">Painters</button>
       <button class="chip" data-filter="musicians" aria-pressed="false">Musicians</button>
     </div>
     <div class="controls" role="group" aria-label="Filter by source">
-      <button class="chip src" data-src="all" aria-pressed="true">Both sources</button>
+      <button class="chip src" data-src="all" aria-pressed="true">All sources</button>
       <button class="chip src" data-src="essay" aria-pressed="false">Essay</button>
       <button class="chip src" data-src="talk" aria-pressed="false">Talk</button>
+      <button class="chip src" data-src="pick" aria-pressed="false">Picks</button>
       <span class="spacer"></span>
       <button class="link-btn" id="toggleDone" aria-pressed="false">Hide finished</button>
       <button class="link-btn" id="reset">Reset</button>
@@ -482,6 +486,60 @@ const SECTIONS = [
         ["The Code of the Woosters", 1938, "A cow-creamer, a notebook and chaos."]
       ]}
   ]},
+  // Not from Bradbury: modern SF & fantasy short fiction for the nightly story
+  { id: "picks", label: "Modern SF &amp; fantasy", artists: [
+    { name: "Quick reads", dates: "Various", modern: true, links: [["Clarkesworld", "https://clarkesworldmagazine.com/"], ["Uncanny", "https://www.uncannymagazine.com/"], ["Reactor", "https://reactormag.com/"]], why: "Free online, most under half an hour — palate cleansers between longer books.",
+      works: [
+        ["They're Made Out of Meat", 1991, "Terry Bisson. Two aliens can’t believe it. Two minutes.", "https://terrybisson.com/theyre-made-out-of-meat-2"],
+        ["Lena (short story)", 2021, "qntm. A Wikipedia-style entry on the most-copied uploaded brain. Chilling.", "https://qntm.org/mmacevedo"],
+        ["Folding Beijing", 2015, "Hao Jingfang. A city that folds itself away by class. Hugo winner.", "https://www.uncannymagazine.com/article/folding-beijing-2/"],
+        ["The Things (short story)", 2010, "Peter Watts. John Carpenter’s The Thing, told by the Thing.", "https://clarkesworldmagazine.com/watts_01_10/"],
+        ["Jackalope Wives", 2014, "Ursula Vernon. Warm, strange folk-tale fantasy. Free on the Apex podcast.", "https://www.apexbookcompany.com/blogs/apex-magazine/podcast-ep-7-jackalope-wives/", "Listen free"],
+        ["The Last Question", 1956, "Isaac Asimov. Trillions of years, one question, a great ending.", openlib("The Last Question Asimov"), "Find"]
+      ]},
+    { name: "Ted Chiang", dates: "b. 1967", modern: true, why: "One perfect idea per story, followed all the way down. Start with Stories of Your Life and Others.",
+      works: [
+        ["Tower of Babylon (story)", 1990, "Climbing the tower until you hit the vault of heaven."],
+        ["Understand (story)", 1991, "A drug that keeps raising your intelligence."],
+        ["Story of Your Life", 1998, "Learning an alien language rewires time. Became the film Arrival."]
+      ]},
+    { name: "Brandon Sanderson", dates: "b. 1975", modern: true, why: "Cosmere novellas — clever magic systems in one sitting. Collected in Arcanum Unbounded.",
+      works: [
+        ["The Emperor's Soul", 2012, "A forger must rebuild an emperor’s soul in 100 days. Hugo winner."],
+        ["Sixth of the Dusk", 2014, "A trapper on islands where everything wants to eat you."],
+        ["Shadows for Silence in the Forests of Hell", 2013, "A bounty hunter and a forest full of the dead."]
+      ]},
+    { name: "Iain M. Banks", dates: "1954–2013", modern: true, why: "The Culture in short form. All three are in The State of the Art.",
+      works: [
+        ["The State of the Art (novella)", 1989, "A Culture ship visits 1977 Earth and debates whether to intervene."],
+        ["A Gift from the Culture", 1987, "A Culture exile, a debt and a gun."],
+        ["Descendant (Banks)", 1987, "A man and his talking spacesuit, stranded."]
+      ]},
+    { name: "Dan Simmons", dates: "b. 1948", modern: true, why: "Early stories from Prayers to Broken Stones, including a Hyperion seed.",
+      works: [
+        ["Remembering Siri", 1983, "The love story that grew into a tale in Hyperion."],
+        ["The River Styx Runs Upstream", 1982, "A family brings their mother back. Not quite right."],
+        ["Vanni Fucci Is Alive and Well and Living in Hell", 1988, "A damned soul hijacks a TV evangelist’s show."]
+      ]},
+    { name: "Ken Liu", dates: "b. 1976", modern: true, why: "Big ideas with real emotional weight. Collected in The Paper Menagerie.",
+      works: [
+        ["The Paper Menagerie", 2011, "Origami animals that come alive. Swept the Hugo, Nebula and World Fantasy."],
+        ["Mono no aware (short story)", 2012, "The last Japanese man on a generation ship."],
+        ["The Man Who Ended History", 2011, "Time travel as historical witness — and its cost."]
+      ]},
+    { name: "Greg Egan", dates: "b. 1961", modern: true, why: "Mind-bending ideas about identity and physics. Start with Axiomatic.",
+      works: [
+        ["Wang's Carpets", 1995, "Alien life that turns out to be pure mathematics."],
+        ["Learning to Be Me", 1990, "The jewel in your head that will one day replace you."],
+        ["Axiomatic (short story)", 1990, "An implant that rewrites your beliefs on demand."]
+      ]},
+    { name: "Ursula K. Le Guin", dates: "1929–2018", modern: true, why: "Anthropologist of invented worlds, in SF and fantasy alike. See The Wind’s Twelve Quarters.",
+      works: [
+        ["The Ones Who Walk Away from Omelas", 1973, "A perfect city, and what it costs. Short and haunting."],
+        ["The Rule of Names", 1964, "A small Earthsea story where true names matter."],
+        ["Nine Lives (short story)", 1969, "A team of ten clones on a hostile planet."]
+      ]}
+  ]},
   { id: "essayists", label: "Essayists", artists: [
     { name: "Loren Eiseley", dates: "1907–1977", modern: true, why: "Anthropologist who wrote science like poetry — Bradbury’s favourite essayist.",
       works: [
@@ -574,6 +632,7 @@ const display = t => t.replace(/\s*\([^)]*\)$/, "");
 const BOTH = new Set(["William Shakespeare", "Alexander Pope", "Herman Melville", "George Bernard Shaw"]);
 SECTIONS.forEach(sec => sec.artists.forEach(a => {
   a.src = BOTH.has(a.name) ? ["essay", "talk"]
+        : sec.id === "picks" ? ["pick"]
         : (a.src || (sec.id === "stories" || sec.id === "essayists" ? ["talk"] : ["essay"]));
 }));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
@@ -584,18 +643,19 @@ SECTIONS.forEach(sec => {
   html += `<section data-cat="${sec.id}"><h2>${sec.label} <span>${sec.artists.length}</span></h2><div class="grid">`;
   sec.artists.forEach(a => {
     const aid = slug(a.name);
-    const links = (sec.id === "musicians" ? musicLinks : sec.id === "painters" ? artLinks : bookLinks)(a.name, a.modern).concat(a.extra || []);
-    const badges = a.src.map(s => `<span class="badge ${s}">${s === "talk" ? "Talk" : "Essay"}</span>`).join("");
+    const links = a.links || (sec.id === "musicians" ? musicLinks : sec.id === "painters" ? artLinks : bookLinks)(a.name, a.modern).concat(a.extra || []);
+    const badges = a.src.map(s => `<span class="badge ${s}">${{ talk: "Talk", essay: "Essay", pick: "Pick" }[s]}</span>`).join("");
     html += `<article class="card" data-artist="${aid}" data-src="${a.src.join(" ")}">
       <div class="card-head"><h3 class="name">${esc(a.name)}</h3><span class="dates">${a.dates}</span></div>
       <div class="badges">${badges}</div>
       <p class="why">${esc(a.why)}${a.tip ? ` <em>${esc(a.tip)}</em>` : ""}</p>
       <ul class="works">`;
-    a.works.forEach(([t, y, note]) => {
+    a.works.forEach(([t, y, note, url, urlLabel]) => {
       const id = `${aid}--${slug(t)}`;
       const shown = display(t);
       const q = `${shown} ${a.name.split(" ").slice(-1)[0]}`;
-      const second = sec.id === "musicians" ? ["Listen", spotify(q)]
+      const second = url ? [urlLabel || "Read free", url]
+                   : sec.id === "musicians" ? ["Listen", spotify(q)]
                    : sec.id === "painters" ? ["See it", gac(shown)]
                    : a.modern ? ["Find", openlib(q)]
                    : ["Read", gutenberg(shown)];
@@ -628,7 +688,7 @@ function update() {
     const n = b.filter(x => x.checked).length;
     card.classList.toggle("done", n === b.length);
     if (n === b.length) artistsDone++;
-    card.querySelector("[data-tally]").textContent = n === b.length ? "✓ All three explored" : `${n} of ${b.length} explored`;
+    card.querySelector("[data-tally]").textContent = n === b.length ? (b.length === 3 ? "✓ All three explored" : "✓ All explored") : `${n} of ${b.length} explored`;
   });
   document.getElementById("artistsDone").textContent = `${artistsDone} of ${document.querySelectorAll(".card").length} artists complete`;
 }
@@ -683,7 +743,7 @@ try { const v = JSON.parse(localStorage.getItem(CKEY)); if (v) ch = { days: v.da
 const saveCh = () => { try { localStorage.setItem(CKEY, JSON.stringify(ch)); } catch (e) {} };
 
 const TASKS = [
-  { k: "story", label: "Short story", cat: "stories", ph: "Which story?" },
+  { k: "story", label: "Short story", cat: ["stories", "picks"], ph: "Which story?" },
   { k: "poem", label: "Poem", cat: "poets", ph: "Which poem?" },
   { k: "essay", label: "Essay", cat: "essayists", ph: "Which essay?" },
   { k: "painting", label: "Painting", cat: "painters", ph: "Which painting?" }
@@ -691,6 +751,7 @@ const TASKS = [
 
 // Index of list works, for autocomplete, suggestions and syncing ticks
 const WORKS = {}, BY_TITLE = {};
+const poolOf = t => [].concat(t.cat).flatMap(c => WORKS[c]);
 SECTIONS.forEach(sec => {
   WORKS[sec.id] = [];
   sec.artists.forEach(a => a.works.forEach(([t]) => {
@@ -700,7 +761,7 @@ SECTIONS.forEach(sec => {
 });
 TASKS.forEach(t => {
   const dl = document.createElement("datalist"); dl.id = `dl-${t.k}`;
-  dl.innerHTML = WORKS[t.cat].map(w => `<option value="${esc(w.title)}">${esc(w.artist)}</option>`).join("");
+  dl.innerHTML = poolOf(t).map(w => `<option value="${esc(w.title)}">${esc(w.artist)}</option>`).join("");
   document.body.appendChild(dl);
 });
 
@@ -750,8 +811,8 @@ function syncList(title) {
 }
 function suggest(tk) {
   const t = TASKS.find(x => x.k === tk);
-  const fresh = WORKS[t.cat].filter(w => !state[w.id]);
-  const pool = fresh.length ? fresh : WORKS[t.cat];
+  const fresh = poolOf(t).filter(w => !state[w.id]);
+  const pool = fresh.length ? fresh : poolOf(t);
   const w = pool[Math.floor(Math.random() * pool.length)];
   setTask(dkey(sel), tk, { title: w.title });
   renderChallenge();
