@@ -10,4 +10,4 @@ The **Challenge** tab (`#challenge`) tracks Bradbury's daily habit — a short s
 
 The **Modern SF & fantasy** section (badge: *Pick*) isn't from Bradbury — it's contemporary short fiction (Chiang, Sanderson, Banks, Simmons, Ken Liu, Egan, Le Guin, plus free-to-read quick reads) to feed the nightly short story. The Challenge tab's story suggestions draw from it too.
 
-The **Audiobooks** section lists short-story collections that work well on audio (Ken Liu, Jemisin, King, Joe Hill, Kelly Link, Bradbury), three standout stories each, plus free story podcasts. Its stories feed the Challenge tab's daily story suggestions; the podcast and qntm cards don't.
+The **Audiobooks** section lists short-story collections that work well on audio (Ken Liu, Jemisin, King, Joe Hill, Kelly Link, Bradbury, The Twilight Zone radio dramas), three standout stories each, plus free story podcasts. Its stories feed the Challenge tab's daily story suggestions; the podcast and qntm cards don't.
