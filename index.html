@@ -262,6 +262,7 @@
       <button class="chip" data-filter="writers" aria-pressed="false">Writers</button>
       <button class="chip" data-filter="stories" aria-pressed="false">Short stories</button>
       <button class="chip" data-filter="picks" aria-pressed="false">Modern SF &amp; fantasy</button>
+      <button class="chip" data-filter="audio" aria-pressed="false">Audiobooks</button>
       <button class="chip" data-filter="poets" aria-pressed="false">Poets</button>
       <button class="chip" data-filter="essayists" aria-pressed="false">Essayists</button>
       <button class="chip" data-filter="painters" aria-pressed="false">Painters</button>
@@ -302,6 +303,8 @@ const presto = q => `https://www.prestomusic.com/search?search_query=${enc(q)}`;
 const gac = q => `https://artsandculture.google.com/search?q=${enc(q)}`;
 const commons = q => `https://commons.wikimedia.org/w/index.php?search=${enc(q)}`;
 const openlib = q => `https://openlibrary.org/search?q=${enc(q)}`;
+const audible = q => `https://www.audible.co.uk/search?keywords=${enc(q)}`;
+const audioLinks = q => [["Audible", audible(q)], ["Spotify", spotify(q)], ["Library (Libby)", "https://libbyapp.com/"]];
 
 const bookLinks = (n, modern) => modern
   ? [["Wikipedia", wiki(n)], ["Borrow (Open Library)", openlib(n)], ["Buy", bookshop(n)]]
@@ -497,13 +500,13 @@ const SECTIONS = [
         ["Jackalope Wives", 2014, "Ursula Vernon. Warm, strange folk-tale fantasy. Free on the Apex podcast.", "https://www.apexbookcompany.com/blogs/apex-magazine/podcast-ep-7-jackalope-wives/", "Listen free"],
         ["The Last Question", 1956, "Isaac Asimov. Trillions of years, one question, a great ending.", openlib("The Last Question Asimov"), "Find"]
       ]},
-    { name: "Ted Chiang", dates: "b. 1967", modern: true, why: "One perfect idea per story, followed all the way down. Start with Stories of Your Life and Others.",
+    { name: "Ted Chiang", dates: "b. 1967", modern: true, extra: [["Audiobook", audible("Stories of Your Life and Others Ted Chiang")]], why: "One perfect idea per story, followed all the way down. Start with Stories of Your Life and Others.",
       works: [
         ["Tower of Babylon (story)", 1990, "Climbing the tower until you hit the vault of heaven."],
         ["Understand (story)", 1991, "A drug that keeps raising your intelligence."],
         ["Story of Your Life", 1998, "Learning an alien language rewires time. Became the film Arrival."]
       ]},
-    { name: "Brandon Sanderson", dates: "b. 1975", modern: true, why: "Cosmere novellas — clever magic systems in one sitting. Collected in Arcanum Unbounded.",
+    { name: "Brandon Sanderson", dates: "b. 1975", modern: true, extra: [["Audiobook", audible("Arcanum Unbounded Sanderson")]], why: "Cosmere novellas — clever magic systems in one sitting. Collected in Arcanum Unbounded.",
       works: [
         ["The Emperor's Soul", 2012, "A forger must rebuild an emperor’s soul in 100 days. Hugo winner."],
         ["Sixth of the Dusk", 2014, "A trapper on islands where everything wants to eat you."],
@@ -521,7 +524,7 @@ const SECTIONS = [
         ["The River Styx Runs Upstream", 1982, "A family brings their mother back. Not quite right."],
         ["Vanni Fucci Is Alive and Well and Living in Hell", 1988, "A damned soul hijacks a TV evangelist’s show."]
       ]},
-    { name: "Ken Liu", dates: "b. 1976", modern: true, why: "Big ideas with real emotional weight. Collected in The Paper Menagerie.",
+    { name: "Ken Liu", dates: "b. 1976", modern: true, extra: [["Audiobook", audible("The Paper Menagerie Ken Liu")]], why: "Big ideas with real emotional weight. Collected in The Paper Menagerie.",
       works: [
         ["The Paper Menagerie", 2011, "Origami animals that come alive. Swept the Hugo, Nebula and World Fantasy."],
         ["Mono no aware (short story)", 2012, "The last Japanese man on a generation ship."],
@@ -538,6 +541,72 @@ const SECTIONS = [
         ["The Ones Who Walk Away from Omelas", 1973, "A perfect city, and what it costs. Short and haunting."],
         ["The Rule of Names", 1964, "A small Earthsea story where true names matter."],
         ["Nine Lives (short story)", 1969, "A team of ten clones on a hostile planet."]
+      ]}
+  ]},
+  // Not from Bradbury: short-story audiobooks — one story a day for the challenge
+  { id: "audio", label: "Audiobooks &amp; podcasts", artists: [
+    { name: "The Hidden Girl and Other Stories", dates: "Ken Liu · 2020", listen: "The Hidden Girl Ken Liu", why: "Ken Liu’s second collection — the next step after The Paper Menagerie.",
+      works: [
+        ["The Hidden Girl (story)", 2017, "A girl trained as an assassin who can step between worlds."],
+        ["Byzantine Empathy", 2018, "VR, cryptocurrency and who gets to decide which suffering counts."],
+        ["Thoughts and Prayers", 2019, "A family’s grief turned into an internet meme."]
+      ]},
+    { name: "How Long ’til Black Future Month?", dates: "N. K. Jemisin · 2018", listen: "How Long til Black Future Month Jemisin", why: "Sharp, varied SF and fantasy from the Broken Earth author.",
+      works: [
+        ["The Ones Who Stay and Fight", 2020, "Her answer to Le Guin’s Omelas."],
+        ["The City Born Great", 2016, "New York City is being born — and something wants it dead."],
+        ["Red Dirt Witch", 2016, "A Black mother in 1960s Alabama bargains with a fae."]
+      ]},
+    { name: "Skeleton Crew", dates: "Stephen King · 1985", listen: "Skeleton Crew Stephen King", why: "Classic King short fiction.",
+      works: [
+        ["The Jaunt", 1981, "Teleportation is instant — for the body. A perfect SF-horror story."],
+        ["The Raft", 1982, "Four students, a lake and something in the water."],
+        ["Survivor Type", 1982, "A surgeon stranded on a rock with a lot of heroin. Grim."]
+      ]},
+    { name: "The Bazaar of Bad Dreams", dates: "Stephen King · 2015", listen: "The Bazaar of Bad Dreams Stephen King", why: "Later King, with his own introduction to every story.",
+      works: [
+        ["Ur (novella)", 2009, "A Kindle that downloads books from parallel universes."],
+        ["Mile 81", 2011, "An abandoned rest stop and a car that eats people."],
+        ["Summer Thunder", 2013, "The last days after the end of the world. Quiet and devastating."]
+      ]},
+    { name: "20th Century Ghosts", dates: "Joe Hill · 2005", listen: "20th Century Ghosts Joe Hill", why: "King’s son, and arguably the better short-story writer.",
+      works: [
+        ["Pop Art", 2001, "A boy’s best friend is inflatable. Unforgettable."],
+        ["The Black Phone", 2004, "A kidnapped boy and a disconnected phone that rings."],
+        ["Best New Horror", 2005, "An editor goes looking for the author of a story too dark to print."]
+      ]},
+    { name: "Get in Trouble", dates: "Kelly Link · 2015", listen: "Get in Trouble Kelly Link", why: "Weird, dreamlike and impossible to predict.",
+      works: [
+        ["The Summer People", 2011, "A teenager caretakes a house for guests she never sees."],
+        ["I Can See Right Through You", 2014, "A demon-lover film star returns to the set of a haunting."],
+        ["Origin Story", 2006, "A superhero’s ex, a half-built theme park and a long conversation."]
+      ]},
+    { name: "The Illustrated Man", dates: "Ray Bradbury · 1951", listen: "The Illustrated Man Ray Bradbury", why: "Bradbury himself — stories that move across a tattooed man’s skin.",
+      works: [
+        ["The Veldt", 1950, "A nursery that becomes whatever the children imagine."],
+        ["Kaleidoscope", 1949, "Astronauts scattered through space, talking as they fall."],
+        ["The Rocket Man", 1951, "A father torn between his family and the stars."]
+      ]},
+    { name: "The October Country", dates: "Ray Bradbury · 1955", listen: "The October Country Ray Bradbury", why: "Bradbury’s dark side — autumnal, eerie tales.",
+      works: [
+        ["The Small Assassin", 1946, "A new mother is sure her baby wants her dead."],
+        ["The Scythe", 1943, "A farmer inherits a field of wheat — and the job of harvesting it."],
+        ["Skeleton (Bradbury)", 1945, "A man becomes terrified of his own skeleton."]
+      ]},
+    { name: "qntm", dates: "b. 1982", notStory: true, listen: "There Is No Antimemetics Division qntm", why: "Author of “Lena”. The collection is e-book only; the novel is on audio.",
+      works: [
+        ["Valuable Humans in Transit and Other Stories", 2022, "Includes “Lena” — e-book and print only.", "https://qntm.gumroad.com/l/evmgaf", "Get e-book"],
+        ["There Is No Antimemetics Division", 2021, "Ideas that erase themselves from your memory. Novel, on Audible."]
+      ]},
+    { name: "Story podcasts", dates: "Free", notStory: true, why: "One professionally read story per episode, with huge back catalogues.",
+      links: [["Escape Artists", "https://escapeartists.net/"]],
+      works: [
+        ["Escape Pod", "", "Science fiction.", "https://escapepod.org/", "Listen free"],
+        ["PodCastle", "", "Fantasy.", "https://podcastle.org/", "Listen free"],
+        ["Pseudopod", "", "Horror.", "https://pseudopod.org/", "Listen free"],
+        ["LeVar Burton Reads", "", "He picks the stories and reads them beautifully.", "https://open.spotify.com/search/LeVar%20Burton%20Reads", "Listen free"],
+        ["Clarkesworld Magazine", "", "Audio of the magazine’s stories, including “The Things”.", "https://open.spotify.com/search/Clarkesworld%20Magazine%20podcast", "Listen free"],
+        ["Uncanny Magazine", "", "Stories, poems and essays from Uncanny.", "https://open.spotify.com/search/Uncanny%20Magazine%20podcast", "Listen free"]
       ]}
   ]},
   { id: "essayists", label: "Essayists", artists: [
@@ -632,7 +701,7 @@ const display = t => t.replace(/\s*\([^)]*\)$/, "");
 const BOTH = new Set(["William Shakespeare", "Alexander Pope", "Herman Melville", "George Bernard Shaw"]);
 SECTIONS.forEach(sec => sec.artists.forEach(a => {
   a.src = BOTH.has(a.name) ? ["essay", "talk"]
-        : sec.id === "picks" ? ["pick"]
+        : sec.id === "picks" || sec.id === "audio" ? ["pick"]
         : (a.src || (sec.id === "stories" || sec.id === "essayists" ? ["talk"] : ["essay"]));
 }));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
@@ -643,7 +712,7 @@ SECTIONS.forEach(sec => {
   html += `<section data-cat="${sec.id}"><h2>${sec.label} <span>${sec.artists.length}</span></h2><div class="grid">`;
   sec.artists.forEach(a => {
     const aid = slug(a.name);
-    const links = a.links || (sec.id === "musicians" ? musicLinks : sec.id === "painters" ? artLinks : bookLinks)(a.name, a.modern).concat(a.extra || []);
+    const links = a.links || (sec.id === "audio" && a.listen ? audioLinks(a.listen) : null) || (sec.id === "musicians" ? musicLinks : sec.id === "painters" ? artLinks : bookLinks)(a.name, a.modern).concat(a.extra || []);
     const badges = a.src.map(s => `<span class="badge ${s}">${{ talk: "Talk", essay: "Essay", pick: "Pick" }[s]}</span>`).join("");
     html += `<article class="card" data-artist="${aid}" data-src="${a.src.join(" ")}">
       <div class="card-head"><h3 class="name">${esc(a.name)}</h3><span class="dates">${a.dates}</span></div>
@@ -655,6 +724,7 @@ SECTIONS.forEach(sec => {
       const shown = display(t);
       const q = `${shown} ${a.name.split(" ").slice(-1)[0]}`;
       const second = url ? [urlLabel || "Read free", url]
+                   : sec.id === "audio" ? ["Listen", audible(a.listen)]
                    : sec.id === "musicians" ? ["Listen", spotify(q)]
                    : sec.id === "painters" ? ["See it", gac(shown)]
                    : a.modern ? ["Find", openlib(q)]
@@ -743,7 +813,7 @@ try { const v = JSON.parse(localStorage.getItem(CKEY)); if (v) ch = { days: v.da
 const saveCh = () => { try { localStorage.setItem(CKEY, JSON.stringify(ch)); } catch (e) {} };
 
 const TASKS = [
-  { k: "story", label: "Short story", cat: ["stories", "picks"], ph: "Which story?" },
+  { k: "story", label: "Short story", cat: ["stories", "picks", "audio"], ph: "Which story?" },
   { k: "poem", label: "Poem", cat: "poets", ph: "Which poem?" },
   { k: "essay", label: "Essay", cat: "essayists", ph: "Which essay?" },
   { k: "painting", label: "Painting", cat: "painters", ph: "Which painting?" }
@@ -756,7 +826,8 @@ SECTIONS.forEach(sec => {
   WORKS[sec.id] = [];
   sec.artists.forEach(a => a.works.forEach(([t]) => {
     const w = { id: `${slug(a.name)}--${slug(t)}`, title: display(t), artist: a.name, url: wiki(t) };
-    WORKS[sec.id].push(w); BY_TITLE[w.title.toLowerCase()] = w;
+    if (!a.notStory) WORKS[sec.id].push(w);
+    BY_TITLE[w.title.toLowerCase()] = w;
   }));
 });
 TASKS.forEach(t => {
